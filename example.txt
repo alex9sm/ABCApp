@@ -1,0 +1,93 @@
+-- =============================================
+-- USERS TABLE
+-- =============================================
+-- Custom user profiles linked to Supabase auth.users
+CREATE TABLE public.users (
+    id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
+    email TEXT NOT NULL,
+    home_store_id TEXT NOT NULL, -- ABC store ID (e.g. "123")
+    notifications_enabled BOOLEAN DEFAULT true,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- =============================================
+-- WATCHLIST TABLE
+-- =============================================
+-- Stores user's monitored products with live inventory data
+CREATE TABLE public.watchlist (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID REFERENCES public.users(id) ON DELETE CASCADE NOT NULL,
+    product_code TEXT NOT NULL, -- ABC's internal product code
+    product_name TEXT NOT NULL,
+    product_image_url TEXT,
+    inventory_data JSONB NOT NULL, -- Stores home store + 5 closest stores inventory
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- =============================================
+-- INDEXES FOR PERFORMANCE
+-- =============================================
+-- Index for quick user lookups
+CREATE INDEX idx_users_email ON public.users(email);
+CREATE INDEX idx_users_username ON public.users(username);
+
+-- Indexes for watchlist queries
+CREATE INDEX idx_watchlist_user_id ON public.watchlist(user_id);
+CREATE INDEX idx_watchlist_product_code ON public.watchlist(product_code);
+CREATE INDEX idx_watchlist_created_at ON public.watchlist(created_at);
+
+-- Composite index for user's watchlist items
+CREATE INDEX idx_watchlist_user_product ON public.watchlist(user_id, product_code);
+
+-- =============================================
+-- ROW LEVEL SECURITY (RLS) POLICIES
+-- =============================================
+-- Enable RLS on all tables
+ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.watchlist ENABLE ROW LEVEL SECURITY;
+
+-- Users can only access their own profile
+CREATE POLICY "Users can view own profile" ON public.users
+    FOR SELECT USING (auth.uid() = id);
+
+CREATE POLICY "Users can update own profile" ON public.users
+    FOR UPDATE USING (auth.uid() = id);
+
+CREATE POLICY "Users can insert own profile" ON public.users
+    FOR INSERT WITH CHECK (auth.uid() = id);
+
+-- Users can only access their own watchlist items
+CREATE POLICY "Users can view own watchlist" ON public.watchlist
+    FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert own watchlist items" ON public.watchlist
+    FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update own watchlist items" ON public.watchlist
+    FOR UPDATE USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete own watchlist items" ON public.watchlist
+    FOR DELETE USING (auth.uid() = user_id);
+
+-- =============================================
+-- FUNCTIONS & TRIGGERS
+-- =============================================
+-- Function to automatically update updated_at timestamp
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = NOW();
+    RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+-- Triggers to auto-update updated_at
+CREATE TRIGGER update_users_updated_at 
+    BEFORE UPDATE ON public.users 
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_watchlist_updated_at 
+    BEFORE UPDATE ON public.watchlist 
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
