@@ -1,20 +1,18 @@
 import { Button, Input } from '@rneui/themed'
 import { Session } from '@supabase/supabase-js'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { Alert, StyleSheet, View } from 'react-native'
 import { supabase } from '../utils/supabase'
+import { useAuth } from '../contexts/AuthContext'
 
 export default function Account({ session }: { session: Session }) {
+  const { signOut } = useAuth()
   const [loading, setLoading] = useState(true)
   const [username, setUsername] = useState('')
   const [website, setWebsite] = useState('')
   const [avatarUrl, setAvatarUrl] = useState('')
 
-  useEffect(() => {
-    if (session) getProfile()
-  }, [session])
-
-  async function getProfile() {
+  const getProfile = useCallback(async () => {
     try {
       setLoading(true)
       if (!session?.user) throw new Error('No user on the session!')
@@ -40,7 +38,11 @@ export default function Account({ session }: { session: Session }) {
     } finally {
       setLoading(false)
     }
-  }
+  }, [session])
+
+  useEffect(() => {
+    if (session) getProfile()
+  }, [session, getProfile])
 
   async function updateProfile({
     username,
@@ -98,7 +100,7 @@ export default function Account({ session }: { session: Session }) {
       </View>
 
       <View style={styles.verticallySpaced}>
-        <Button title="Sign Out" onPress={() => supabase.auth.signOut()} />
+        <Button title="Sign Out" onPress={signOut} />
       </View>
     </View>
   )

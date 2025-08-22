@@ -1,25 +1,53 @@
-import { Session } from '@supabase/supabase-js'
-import { useEffect, useState } from 'react'
-import { View } from 'react-native'
-import Account from '../components/Account'
+import { useState } from 'react'
+import { View, StyleSheet } from 'react-native'
 import Auth from '../components/Auth'
-import { supabase } from '../utils/supabase'
+import OTPVerification from '../components/OTPVerification'
+import MainTabs from '../components/MainTabs'
+import { AuthProvider, useAuth } from '../contexts/AuthContext'
 
-export default function Index() {
-  const [session, setSession] = useState<Session | null>(null)
-  
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-    })
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-    })
-  }, [])
-  
+function AuthFlow() {
+  const { session, loading } = useAuth()
+  const [currentStep, setCurrentStep] = useState<'email' | 'otp'>('email')
+  const [email, setEmail] = useState('')
+
+  const handleEmailSubmitted = (submittedEmail: string) => {
+    setEmail(submittedEmail)
+    setCurrentStep('otp')
+  }
+
+  const handleGoBack = () => {
+    setCurrentStep('email')
+  }
+
+  if (loading) {
+    return <View style={styles.container} />
+  }
+
+  if (session && session.user) {
+    return <MainTabs />
+  }
+
   return (
-    <View>
-      {session && session.user ? <Account key={session.user.id} session={session} /> : <Auth />}
+    <View style={styles.container}>
+      {currentStep === 'email' ? (
+        <Auth onEmailSubmitted={handleEmailSubmitted} />
+      ) : (
+        <OTPVerification email={email} onGoBack={handleGoBack} />
+      )}
     </View>
   )
 }
+
+export default function Index() {
+  return (
+    <AuthProvider>
+      <AuthFlow />
+    </AuthProvider>
+  )
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+})
