@@ -1,6 +1,6 @@
 import { Button } from '@rneui/base'
-import React, { useState, useRef } from 'react'
-import { Alert, StyleSheet, View, Text, TextInput } from 'react-native'
+import { useRef, useState } from 'react'
+import { Alert, StyleSheet, Text, TextInput, View } from 'react-native'
 import { supabase } from '../utils/supabase'
 
 interface OTPVerificationProps {
@@ -119,6 +119,10 @@ export default function OTPVerification({ email, onGoBack }: OTPVerificationProp
           title={loading ? "Verifying..." : "Verify Code"}
           disabled={loading || code.join('').length !== 6}
           onPress={handleVerifyCode}
+          buttonStyle={styles.verifyButton}
+          disabledStyle={styles.verifyButton}
+          disabledTitleStyle={styles.buttonText}
+          titleStyle={styles.buttonText}
         />
       </View>
 
@@ -128,6 +132,8 @@ export default function OTPVerification({ email, onGoBack }: OTPVerificationProp
           type="outline"
           disabled={resendLoading}
           onPress={handleResendCode}
+          buttonStyle={styles.resendButton}
+          titleStyle={styles.resendButtonText}
         />
       </View>
 
@@ -136,6 +142,7 @@ export default function OTPVerification({ email, onGoBack }: OTPVerificationProp
           title="Back"
           type="clear"
           onPress={onGoBack}
+          titleStyle={styles.backButtonText}
         />
       </View>
     </View>
@@ -144,25 +151,28 @@ export default function OTPVerification({ email, onGoBack }: OTPVerificationProp
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 40,
     padding: 12,
+    paddingBottom: 300,
+    backgroundColor: '#012F47',
   },
   title: {
+    color: 'white',
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 8,
+    marginTop: 180,
   },
   subtitle: {
     fontSize: 16,
     textAlign: 'center',
-    color: '#666',
+    color: '#E0E0E0',
     marginBottom: 30,
     lineHeight: 22,
   },
   email: {
     fontWeight: 'bold',
-    color: '#000',
+    color: 'white',
   },
   codeContainer: {
     flexDirection: 'row',
@@ -178,7 +188,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     fontSize: 20,
     fontWeight: 'bold',
-    backgroundColor: '#fff',
+    backgroundColor: '#001E2D',
+    color: 'white',
+    textAlign: 'center',
   },
   verticallySpaced: {
     paddingTop: 4,
@@ -187,5 +199,31 @@ const styles = StyleSheet.create({
   },
   mt20: {
     marginTop: 20,
+  },
+  verifyButton: {
+    backgroundColor: '#659CBB',
+    borderRadius: 8,
+    paddingVertical: 16,
+    marginHorizontal: 29,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  resendButton: {
+    borderColor: '#659CBB',
+    borderWidth: 2,
+    borderRadius: 8,
+    paddingVertical: 16,
+    marginHorizontal: 29,
+    backgroundColor: 'transparent',
+  },
+  resendButtonText: {
+    color: '#659CBB',
+    fontSize: 16,
+  },
+  backButtonText: {
+    color: '#659CBB',
+    fontSize: 16,
   },
 })

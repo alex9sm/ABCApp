@@ -1,5 +1,5 @@
 import { Button, Input } from '@rneui/base'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Alert, AppState, StyleSheet, Text, View } from 'react-native'
 import { supabase } from '../utils/supabase'
 
@@ -64,12 +64,15 @@ export default function Auth({ onEmailSubmitted }: AuthProps) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome</Text>
-      <Text style={styles.subtitle}>Enter your email to continue</Text>
+      <Text style={styles.subtitle}>Sign in or create an account</Text>
       
-      <View style={[styles.verticallySpaced, styles.mt20]}>
+      <View style={[styles.verticallySpaced]}>
         <Input
           placeholder="email@address.com"
-          leftIcon={{ type: 'font-awesome', name: 'envelope' }}
+          containerStyle={styles.inputContainer}
+          inputContainerStyle={styles.inputBox}
+          inputStyle={styles.inputText}
+          placeholderTextColor="#999"
           onChangeText={(text: string) => setEmail(text)}
           value={email}
           autoCapitalize={'none'}
@@ -78,11 +81,15 @@ export default function Auth({ onEmailSubmitted }: AuthProps) {
         />
       </View>
       
-      <View style={[styles.verticallySpaced, styles.mt20]}>
+      <View style={[styles.verticallySpaced]}>
         <Button 
           title={loading ? "Sending..." : "Continue"} 
           disabled={loading || !email.trim()} 
-          onPress={handleContinue} 
+          onPress={handleContinue}
+          buttonStyle={styles.button}
+          disabledStyle={styles.button}
+          disabledTitleStyle={styles.buttonText}
+          titleStyle={styles.buttonText}
         />
       </View>
     </View>
@@ -91,27 +98,53 @@ export default function Auth({ onEmailSubmitted }: AuthProps) {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 40,
     padding: 12,
+    backgroundColor: '#012F47',
+    flex: 1,
   },
   title: {
+    marginTop: 250,
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 8,
+    color: 'white',
   },
   subtitle: {
     fontSize: 16,
     textAlign: 'center',
-    color: '#666',
-    marginBottom: 20,
+    color: '#ccc',
+    marginBottom: 40,
   },
   verticallySpaced: {
     paddingTop: 4,
     paddingBottom: 4,
     alignSelf: 'stretch',
   },
-  mt20: {
-    marginTop: 20,
+  inputContainer: {
+    marginBottom: 10,
+  },
+  inputBox: {
+    backgroundColor: '#001E2D',
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    marginHorizontal: 20,
+  },
+  button: {
+    backgroundColor: '#659CBB',
+    borderRadius: 8,
+    paddingVertical: 16,
+    marginHorizontal: 29,
+  },
+  inputText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
   },
 })
