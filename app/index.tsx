@@ -4,6 +4,7 @@ import Auth from '../components/Auth'
 import OTPVerification from '../components/OTPVerification'
 import MainTabs from '../components/MainTabs'
 import ZipCodeLookup from '../components/ZipCodeLookup'
+import StoreSelection from '../components/StoreSelection'
 import { AuthProvider, useAuth } from '../contexts/AuthContext'
 import { supabase } from '../utils/supabase'
 
@@ -13,6 +14,8 @@ function AuthFlow() {
   const [email, setEmail] = useState('')
   const [userHasHomeStore, setUserHasHomeStore] = useState<boolean | null>(null)
   const [checkingHomeStore, setCheckingHomeStore] = useState(false)
+  const [stores, setStores] = useState<any[]>([])
+  const [showStoreSelection, setShowStoreSelection] = useState(false)
 
   const handleEmailSubmitted = (submittedEmail: string) => {
     setEmail(submittedEmail)
@@ -34,10 +37,22 @@ function AuthFlow() {
       
       if (!error) {
         setUserHasHomeStore(true)
+        setShowStoreSelection(false)
+        setStores([])
       }
     } catch (error) {
       console.error('Error updating home store:', error)
     }
+  }
+
+  const handleStoresFound = (foundStores: any[]) => {
+    setStores(foundStores)
+    setShowStoreSelection(true)
+  }
+
+  const handleGoBackToZipCode = () => {
+    setShowStoreSelection(false)
+    setStores([])
   }
 
   useEffect(() => {
@@ -73,7 +88,21 @@ function AuthFlow() {
 
   if (session && session.user) {
     if (userHasHomeStore === false) {
-      return <ZipCodeLookup onStoreSelected={handleStoreSelected} />
+      if (showStoreSelection && stores.length > 0) {
+        return (
+          <StoreSelection 
+            stores={stores} 
+            onStoreSelected={handleStoreSelected}
+            onGoBack={handleGoBackToZipCode}
+          />
+        )
+      }
+      return (
+        <ZipCodeLookup 
+          onStoreSelected={handleStoreSelected} 
+          onStoresFound={handleStoresFound}
+        />
+      )
     }
     return <MainTabs />
   }

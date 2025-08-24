@@ -1,11 +1,22 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 
-interface ZipCodeLookupProps {
-  onStoreSelected: (storeId: string) => void
+interface Store {
+  title: string
+  address: string
+  zip_code: string
+  latitude: number
+  longitude: number
+  hours: string
+  distance: number
 }
 
-const ZipCodeLookup: React.FC<ZipCodeLookupProps> = ({ onStoreSelected }) => {
+interface ZipCodeLookupProps {
+  onStoreSelected: (storeId: string) => void
+  onStoresFound: (stores: Store[]) => void
+}
+
+const ZipCodeLookup: React.FC<ZipCodeLookupProps> = ({ onStoreSelected, onStoresFound }) => {
   const [zipCode, setZipCode] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
@@ -20,15 +31,24 @@ const ZipCodeLookup: React.FC<ZipCodeLookupProps> = ({ onStoreSelected }) => {
     if (zipCode.length !== 5) return
     
     setIsLoading(true)
-    // TODO: Implement store search logic
-    console.log('Searching for stores near:', zipCode)
-    setIsLoading(false)
+    try {
+      const response = await fetch(`https://advancedgr.com/api/v1/stores/${zipCode}`)
+      const result = await response.json()
+      
+      if (result.status === 'success' && result.data) {
+        onStoresFound(result.data)
+      }
+    } catch (error) {
+      console.error('Error fetching stores:', error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Enter Your Zip Code</Text>
-      <Text style={styles.subtitle}>Please enter your zip code so we can find ABC stores near you</Text>
+      <Text style={styles.subtitle}>Please enter your zip code to find ABC stores near you</Text>
       
       <View style={styles.searchContainer}>
         <TextInput
@@ -60,19 +80,20 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#012F47',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
     textAlign: 'center',
+    color: '#fff',
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
+    color: '#D6D6D6',
     marginBottom: 30,
-    marginHorizontal: 30,
+    marginHorizontal: 40,
     textAlign: 'center',
   },
   searchContainer: {
@@ -81,17 +102,18 @@ const styles = StyleSheet.create({
   },
   zipInput: {
     borderWidth: 2,
-    borderColor: '#ddd',
+    borderColor: '#C4E7FB',
     borderRadius: 10,
     padding: 15,
     fontSize: 18,
     textAlign: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#001E2D',
     marginBottom: 20,
     letterSpacing: 2,
+    color: '#fff',
   },
   searchButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#659CBB',
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
