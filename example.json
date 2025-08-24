@@ -1,0 +1,96 @@
+{
+    "status": "success",
+    "data": [
+      {
+        "title": "375",
+        "address": "2231A Old Bridge Road",
+        "zip_code": "22192",
+        "latitude": 38.68277,
+        "longitude": -77.29609,
+        "hours": "Mon-Sat 10 am-9 pm / Sun 10 am-6 pm",
+        "distance": 984
+      },
+      {
+        "title": "301",
+        "address": "4292 Merchants Plaza",
+        "zip_code": "22192-5251",
+        "latitude": 38.67458,
+        "longitude": -77.33504,
+        "hours": "Mon-Sat 10 am-9 pm / Sun 10 am-6 pm",
+        "distance": 2533
+      },
+      {
+        "title": "439",
+        "address": "14220 Smoketown Road",
+        "zip_code": "22192",
+        "latitude": 38.64044,
+        "longitude": -77.3012,
+        "hours": "Mon-Sat 10 am-9 pm / Sun 10 am-6 pm",
+        "distance": 4338
+      },
+      {
+        "title": "353",
+        "address": "4255 Cheshire Plaza",
+        "zip_code": "22193",
+        "latitude": 38.64509,
+        "longitude": -77.33353,
+        "hours": "Mon-Sat 10 am-9 pm / Sun 10 am-7 pm",
+        "distance": 4464
+      },
+      {
+        "title": "33",
+        "address": "12705 Galveston Court",
+        "zip_code": "20112",
+        "latitude": 38.68041,
+        "longitude": -77.36407,
+        "hours": "Mon-Sat 10 am-9 pm / Sun 10 am-6 pm",
+        "distance": 5002
+      },
+      {
+        "title": "271",
+        "address": "13991 Richmond Highway",
+        "zip_code": "22191",
+        "latitude": 38.64882,
+        "longitude": -77.25933,
+        "hours": "Mon-Sat 10 am-10 pm / Sun 10 am-7 pm",
+        "distance": 5310
+      },
+      {
+        "title": "273",
+        "address": "9421 Lorton Market Street",
+        "zip_code": "22079",
+        "latitude": 38.70248,
+        "longitude": -77.22009,
+        "hours": "Mon-Sat 10 am-9 pm / Sun 10 am-6 pm",
+        "distance": 7933
+      },
+      {
+        "title": "55",
+        "address": "9916 Liberia Avenue",
+        "zip_code": "20110",
+        "latitude": 38.71979,
+        "longitude": -77.39825,
+        "hours": "Mon-Sat 10 am-10 pm / Sun 10 am-6 pm",
+        "distance": 9154
+      },
+      {
+        "title": "316",
+        "address": "4108 Fortuna Center Plaza",
+        "zip_code": "22026",
+        "latitude": 38.59604,
+        "longitude": -77.332,
+        "hours": "Mon-Sat 10 am-9 pm / Sun 10 am-6 pm",
+        "distance": 9514
+      },
+      {
+        "title": "264",
+        "address": "16661 River Ridge Boulevard",
+        "zip_code": "22191",
+        "latitude": 38.5883,
+        "longitude": -77.30331,
+        "hours": "Mon-Sat 10 am-10 pm / Sun 10 am-6 pm",
+        "distance": 10117
+      }
+    ],
+    "timestamp": "2025-08-24T14:52:12.138107358-04:00"
+  }
