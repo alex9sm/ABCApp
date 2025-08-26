@@ -1,9 +1,8 @@
-import React from 'react'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Ionicons } from '@expo/vector-icons'
-import SearchScreen from './SearchScreen'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import MenuScreen from './MenuScreen'
 import ProfileScreen from './ProfileScreen'
+import SearchScreen from './SearchScreen'
 
 const Tab = createBottomTabNavigator()
 
@@ -26,12 +25,12 @@ export default function MainTabs() {
 
             return <Ionicons name={iconName} size={size} color={color} />
           },
-          tabBarActiveTintColor: '#007AFF',
-          tabBarInactiveTintColor: 'gray',
+          tabBarActiveTintColor: '#fff',
+          tabBarInactiveTintColor: '#D8D8D8',
           tabBarStyle: {
-            backgroundColor: '#fff',
+            backgroundColor: '#001E2D',
             borderTopWidth: 1,
-            borderTopColor: '#e0e0e0',
+            borderTopColor: '#001E2D',
           },
           headerShown: false,
         })}

@@ -1,5 +1,4 @@
-import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 
 export default function MenuScreen() {
   return (
@@ -15,15 +14,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#012F47',
   },
   text: {
+    color: '#fff',
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 8,
   },
   subtext: {
     fontSize: 16,
-    color: '#666',
+    color: '#fff',
   },
 })

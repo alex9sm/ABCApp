@@ -80,6 +80,15 @@ function AuthFlow() {
     }
 
     checkUserHomeStore()
+    
+    // Reset to email step when user signs out
+    if (!session) {
+      setCurrentStep('email')
+      setEmail('')
+      setUserHasHomeStore(null)
+      setShowStoreSelection(false)
+      setStores([])
+    }
   }, [session])
 
   if (loading || checkingHomeStore) {
